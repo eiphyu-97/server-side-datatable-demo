@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Users | Table</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/jquery.dataTables.min.css}" />
+
+<!-- This style handles sorting icon issue when using jquery datatables min css local import -->
+<style th:inline="text">
+table.dataTable thead .sorting {
+	/* background-image: image-url("sort_both.png"); */
+	background: url([[@{/resources/images/sort_both.png}]]) no-repeat center
+		right;
+}
+
+table.dataTable thead .sorting_asc {
+	/*   background-image: image-url("sort_asc.png");
+ */
+	background: url([[@{/resources/images/sort_asc.png}]]) no-repeat center
+		right;
+}
+
+table.dataTable thead .sorting_desc {
+	/*   background-image: image-url("sort_desc.png");
+ */
+	background: url([[@{/resources/images/sort_desc.png}]]) no-repeat center
+		right;
+}
+
+table.dataTable thead .sorting_asc_disabled {
+	/*  background-image: image-url("sort_asc_disabled.png"); */
+	background: url([[@{/resources/images/sort_asc_disabled.png}]])
+		no-repeat center right;
+}
+
+table.dataTable thead .sorting_desc_disabled {
+	/* background-image: image-url("sort_desc_disabled.png"); */
+	background: url([[@{/resources/images/sort_desc_disabled.png}]])
+		no-repeat center right;
+}
+</style>
+<script type="text/javascript"
+	th:src="@{/resources/js/jquery-3.3.1.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/resources/js/jquery.dataTables.min.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+       var table = $('#example').DataTable({
+            "processing" : true,
+            "serverSide" : true,
+            "paging" : true,
+            "columns": [ // NOTE: you need to specify names of fields as ids for the columns
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "email" }
+            ],
+            "ajax": {
+                "url": "users/data",
+                "type": "POST",
+                "contentType" : "application/json; charset=utf-8",			    
+                "data": function ( d ) {
+                    console.log(d);
+                    console.log("stringify : " + JSON.stringify(d));
+                    return JSON.stringify(d); // NOTE: you also need to stringify POST payload
+                } ,
+                "dataSrc": function (json) {
+                   	console.log(json);
+                    return json.data;
+                }
+            }
+        });
+      
+       
+    });
+</script>
+</head>
+<body>
+
+	<table id="example" class="display" cellspacing="0" width="100%">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+	</table>
+</body>
+</html>
